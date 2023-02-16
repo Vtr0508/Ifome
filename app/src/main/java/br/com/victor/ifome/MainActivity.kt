@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import br.com.victor.ifome.sampledata.sampleSections
+import br.com.victor.ifome.sampledata.sampleShopSections
 import br.com.victor.ifome.ui.screens.HomeScreen
 
 
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     Surface {
-        HomeScreen(sections = sampleSections)
+        HomeScreen(sections = sampleSections, partnerSections = sampleShopSections)
 
 
     }

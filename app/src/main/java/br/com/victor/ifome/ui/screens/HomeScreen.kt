@@ -15,17 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.victor.ifome.model.Product
+import br.com.victor.ifome.model.Shop
 import br.com.victor.ifome.sampledata.sampleProducts
 import br.com.victor.ifome.sampledata.sampleSections
-import br.com.victor.ifome.ui.components.CardProductItem
-import br.com.victor.ifome.ui.components.ProductSection
-import br.com.victor.ifome.ui.components.SearchTextField
-import br.com.victor.ifome.ui.components.SearchTextFieldPreview
+import br.com.victor.ifome.sampledata.sampleShopSections
+import br.com.victor.ifome.ui.components.*
 import br.com.victor.ifome.ui.theme.IfomeTheme
 
 
 @Composable
-fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
+fun HomeScreen(
+    sections: Map<String, List<Product>>,
+    searchText: String = "",
+    partnerSections: Map<String, List<Shop>>,
+) {
     Column {
         var text by remember() { mutableStateOf(searchText) }
 
@@ -69,7 +72,22 @@ fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
                             produtos = product
                         )
                     }
+
                 }
+
+                for (partner in partnerSections){
+                    val title = partner.key
+                    val shop = partner.value
+                    item {
+                        PartnerSection(
+                            title = title,
+                            shop = shop
+                        )
+                    }
+
+                }
+                
+                
             } else {
                 items(searchedProducts) { p ->
                     CardProductItem(
@@ -91,7 +109,7 @@ fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
 private fun HomeScreenPreview() {
     IfomeTheme() {
         Surface() {
-            HomeScreen(sampleSections)
+            HomeScreen(sections = sampleSections, partnerSections = sampleShopSections)
         }
 
     }
@@ -104,7 +122,7 @@ private fun HomeScreenPreview() {
 private fun HomeScreenPreviewSearchText() {
     IfomeTheme() {
         Surface() {
-            HomeScreen(sampleSections, searchText = "pizza")
+            HomeScreen(sampleSections, searchText = "pizza", sampleShopSections)
         }
 
     }

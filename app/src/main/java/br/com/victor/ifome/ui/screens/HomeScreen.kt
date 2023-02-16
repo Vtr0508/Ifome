@@ -19,6 +19,8 @@ import br.com.victor.ifome.sampledata.sampleProducts
 import br.com.victor.ifome.sampledata.sampleSections
 import br.com.victor.ifome.ui.components.CardProductItem
 import br.com.victor.ifome.ui.components.ProductSection
+import br.com.victor.ifome.ui.components.SearchTextField
+import br.com.victor.ifome.ui.components.SearchTextFieldPreview
 import br.com.victor.ifome.ui.theme.IfomeTheme
 
 
@@ -26,6 +28,13 @@ import br.com.victor.ifome.ui.theme.IfomeTheme
 fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
     Column {
         var text by remember() { mutableStateOf(searchText) }
+
+        SearchTextField(
+            searchText = text,
+            onSearchChange = {
+                text = it
+            }
+        )
 
         val searchedProducts = remember(text) {
 
@@ -44,35 +53,6 @@ fun HomeScreen(sections: Map<String, List<Product>>, searchText: String = "") {
 
         }
 
-
-
-
-        OutlinedTextField(
-            value = text,
-            onValueChange = { newValue ->
-                text = newValue
-
-            },
-            Modifier
-                .fillMaxWidth()
-                .padding(
-                    16.dp
-
-                ),
-            shape = RoundedCornerShape(100),
-            label = {
-                Text(text = "Produto")
-            },
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Search,
-                    null
-                )
-            },
-            placeholder = {
-                Text(text = "O que você procura?")
-            }
-        )
         LazyColumn(
             Modifier
                 .fillMaxSize(),

@@ -105,7 +105,7 @@ fun CardProductItemPreview() {
                     name = "Teste",
                     price = BigDecimal("4.99"),
                     description = LoremIpsum(50).values.first()
-                ), expanded = true)
+                ), expanded = false)
 
         }
 

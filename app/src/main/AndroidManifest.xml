@@ -13,11 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ifome"
         tools:targetApi="31">
+
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activities.FormularioProdutoActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Ifome">
+            android:theme="@style/Theme.Ifome"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
+        <activity android:name=".ui.activities.MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,16 +1,16 @@
 package br.com.victor.ifome.dao
 
-import androidx.compose.runtime.mutableStateListOf
 import br.com.victor.ifome.model.Product
-import br.com.victor.ifome.sampledata.sampleProducts
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class ProductDao {
     companion object {
-        private val products = mutableStateListOf<Product>()
+        private val products = MutableStateFlow<List<Product>>(emptyList())
     }
-    fun products() = products.toList()
+    fun products() = products.asStateFlow()
 
     fun save(product: Product) {
-        products.add(product)
+        products.value = products.value + product
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -26,23 +27,26 @@ import br.com.victor.ifome.dao.ProductDao
 import br.com.victor.ifome.model.Product
 import br.com.victor.ifome.ui.screens.ProductFormScreen
 import br.com.victor.ifome.ui.theme.IfomeTheme
+import br.com.victor.ifome.ui.viewmodels.ProductFormScreenViewModel
 import coil.compose.AsyncImage
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
 class FormularioProdutoActivity : ComponentActivity() {
-    private val dao = ProductDao()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             IfomeTheme {
                 Surface {
-                    ProductFormScreen(onSaveClick = { product ->
-                        dao.save(product)
-                        finish()
+                    val viewModel: ProductFormScreenViewModel by viewModels()
+                    ProductFormScreen(
+                        viewModel = viewModel,
+                        onSaveClick = {
+                            finish()
 
-                    })
+                        })
                 }
             }
         }

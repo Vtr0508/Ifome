@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -13,11 +14,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.victor.ifome.dao.ProductDao
-import br.com.victor.ifome.model.Product
 import br.com.victor.ifome.sampledata.*
 import br.com.victor.ifome.ui.screens.HomeScreen
-import br.com.victor.ifome.ui.screens.HomeScreenUiState
+import br.com.victor.ifome.ui.states.HomeScreenUiState
 import br.com.victor.ifome.ui.theme.IfomeTheme
+import br.com.victor.ifome.ui.viewmodels.HomeScreenViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -35,10 +36,11 @@ class MainActivity : ComponentActivity() {
             }, content = {
 
 
-                val products = dao.products()
+
+                val viewModel by viewModels<HomeScreenViewModel>()
 
                 HomeScreen(
-                    products
+                    viewModel
                 )
             })
 

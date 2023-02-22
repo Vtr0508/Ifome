@@ -8,81 +8,23 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.victor.ifome.model.Product
-import br.com.victor.ifome.model.Shop
 import br.com.victor.ifome.sampledata.*
 import br.com.victor.ifome.ui.components.CardProductItem
 import br.com.victor.ifome.ui.components.PartnerSection
 import br.com.victor.ifome.ui.components.ProductSection
 import br.com.victor.ifome.ui.components.SearchTextField
+import br.com.victor.ifome.ui.states.HomeScreenUiState
 import br.com.victor.ifome.ui.theme.IfomeTheme
-
-class HomeScreenUiState(
-    val sections: Map<String, List<Product>> = emptyMap(),
-    val partnerSections: Map<String, List<Shop>> = emptyMap(),
-    val searchedProducts: List<Product> = emptyList(),
-    val onSearchChange:(String) -> Unit = {},
-    searchText: String = ""
-) {
-    var text by mutableStateOf(searchText)
+import br.com.victor.ifome.ui.viewmodels.HomeScreenViewModel
 
 
-
-
-    fun isShowSections(): Boolean {
-        return text.isBlank()
-    }
-
-
-}
 
 @Composable
-fun HomeScreen(products: List<Product>) {
-    val sections = mapOf(
-        "Todos produtos" to products,
-        "Promoções" to sampleDrinks + sampleCandies,
-        "Doces" to sampleCandies,
-        "Bebidas" to sampleDrinks
-    )
-    val shops = mapOf(
-        "Lojas parceiras" to sampleShops
-    )
+fun HomeScreen(
+    viewModel: HomeScreenViewModel
+) {
 
-
-    var text by remember {
-        mutableStateOf("")
-    }
-
-    fun containsNameOrDescription() = { product: Product ->
-        product.name.contains(
-            text,
-            false
-        ) ||
-                product.description?.contains(
-                    text,
-                    ignoreCase = true
-                ) ?: false
-
-    }
-
-    val searchedProducts = remember(text, products) {
-        if (text.isNotBlank()) {
-            sampleProducts.filter(containsNameOrDescription()) +
-                    products.filter(containsNameOrDescription())
-        } else emptyList()
-    }
-
-    val state = remember(products, text) {
-        HomeScreenUiState(
-            sections = sections,
-            partnerSections = shops,
-            searchedProducts = searchedProducts,
-            searchText = text,
-            onSearchChange = {
-                text = it
-            }
-        )
-    }
+    val state by viewModel.uiState.collectAsState()
     HomeScreen(state)
 }
 

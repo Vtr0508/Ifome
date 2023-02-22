@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -31,9 +32,9 @@ fun CardProductItem(
     expanded: Boolean = false,
 
     ) {
-   var expandedState by remember {
-       mutableStateOf(expanded)
-   }
+    var expandedState by rememberSaveable {
+        mutableStateOf(expanded)
+    }
 
     Card(
         modifier
@@ -105,7 +106,8 @@ fun CardProductItemPreview() {
                     name = "Teste",
                     price = BigDecimal("4.99"),
                     description = LoremIpsum(50).values.first()
-                ), expanded = false)
+                ), expanded = false
+            )
 
         }
 

@@ -1,12 +1,13 @@
 package br.com.victor.ifome.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,64 +19,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.victor.ifome.R
 import br.com.victor.ifome.model.Product
+import br.com.victor.ifome.ui.states.ProductFormUiState
 import br.com.victor.ifome.ui.theme.IfomeTheme
+import br.com.victor.ifome.ui.viewmodels.ProductFormScreenViewModel
 import coil.compose.AsyncImage
-import java.math.BigDecimal
 
-class ProductFormUiState(
-    val url: String = "",
-    val name: String = "",
-    val price: String = "",
-    val description: String = "",
-    val isShowPreview: Boolean = url.isNotBlank(),
-    val onUrlChange: (String) -> Unit = {},
-    val onNameChange: (String) -> Unit = {},
-    val onPriceChange: (String) -> Unit = {},
-    val onDescriptionChange: (String) -> Unit = {}
-
-)
 
 @Composable
-fun ProductFormScreen(onSaveClick: (Product) -> Unit = {}) {
-
-    var url by remember {
-        mutableStateOf("")
-    }
-    var name by remember {
-        mutableStateOf("")
-    }
-    var price by remember {
-        mutableStateOf("")
-    }
-    var description by remember {
-        mutableStateOf("")
-    }
-
-    ProductFormScreen(state = ProductFormUiState(
-        url = url,
-        name = name,
-        price = price,
-        description = description,
-        onUrlChange = {
-            url = it
-        }, onNameChange = {
-            name = it
-        }, onDescriptionChange = {
-            description = it
-        }
-    ), onSaveClick = {
-        val convertedPrice = try {
-            BigDecimal(price)
-        } catch (e: IllegalArgumentException){
-            BigDecimal.ZERO
-        }
-        val product = Product(
-            name = name,
-            image = url,
-            description = description,
-            price = convertedPrice
-        )
-        onSaveClick(product)
+fun ProductFormScreen(
+    viewModel: ProductFormScreenViewModel,
+    onSaveClick: () -> Unit = {}
+) {
+    val state by viewModel.uiState.collectAsState()
+    ProductFormScreen(state = state, onSaveClick = {
+        viewModel.save()
+        onSaveClick()
     })
 
 }
@@ -89,6 +47,7 @@ fun ProductFormScreen(
     val name = state.name
     var price = state.price
     val description = state.description
+    val isPriceError = state.isPriceError
 
     Column(
         Modifier
@@ -141,21 +100,11 @@ fun ProductFormScreen(
             )
         )
 
-        var isPriceError by remember {
-            mutableStateOf(false)
-        }
+
         Column {
             TextField(
                 value = price,
-                onValueChange = {
-                    isPriceError = try {
-                        BigDecimal(it)
-                        false
-                    } catch (e: IllegalArgumentException) {
-                        it.isNotEmpty()
-                    }
-                    price = it
-                },
+                onValueChange = state.onPriceChange,
                 Modifier
                     .fillMaxWidth(),
                 isError = isPriceError,
@@ -205,5 +154,5 @@ fun ProductFormScreenPreview() {
             ProductFormScreen(state = ProductFormUiState())
         }
     }
-    
+
 }
